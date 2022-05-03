@@ -428,9 +428,9 @@ void serve_file(int client, const char *filename)
 /**********************************************************************/
 int startup(u_short *port)
 {
-    int httpd = 0;
-    int on = 1;
-    struct sockaddr_in name;
+    int httpd = 0; //socket descriptor
+    int on = 1; //switch
+    struct sockaddr_in name; //server address
 
     httpd = socket(PF_INET, SOCK_STREAM, 0);
     if (httpd == -1)
@@ -439,6 +439,8 @@ int startup(u_short *port)
     name.sin_family = AF_INET;
     name.sin_port = htons(*port);
     name.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    //allow reuse of local addresses and ports
     if ((setsockopt(httpd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on))) < 0)  
     {  
         error_die("setsockopt failed");
